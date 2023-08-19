@@ -1,0 +1,13 @@
+#client
+/client/node_modules
+/client/.pnp
+.pnp.js
+
+/client/build
+
+
+#server
+/server/node_modules
+
+
+.env
