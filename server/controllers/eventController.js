@@ -5,21 +5,64 @@ const pool = require('../database/database')
 //@route POST /events
 //@access private
 const createEvent = async(req,res)=>{
-    console.log('create Event');
+    console.log('create event');
+    console.log(req.body);
+    const {name,date,session,startTime,endTime} = req.body;
+    
+
+    try{
+        const event=await pool.query(`INSERT INTO events VALUES(NULL,?,?,?,?,?);`,
+        [name,date,session,startTime,endTime]);
+        res.sendStatus(200);
+    }
+    catch(err){
+        console.log(err)
+        res.status(400).json({"message":err.sqlMessage});
+    }
 }
 
 //@desc get all Events
 //@route GET /events
 //@access private
 const getAllEvent = async(req,res)=>{
-    console.log('get all Event');
+    const [events]= await pool.query(`SELECT * FROM events;`);
+    console.log(events[0]);
+    res.status(200).json({"events":events});
+
 }
 
 //@desc get Events by id
 //@route GET /events/:id
 //@access private
 const getEventById = async(req,res)=>{
-    console.log('get Event by id');
+    const eventId=req.params.id; 
+
+    console.log('get Event by id...',eventId);
+
+    const [event]= await pool.query(`SELECT * FROM events WHERE eventId=?;`,[eventId]);
+    let [classrooms] = await pool.query(`SELECT classroomId FROM eventdetails WHERE eventId=?;`,[eventId]);
+    classrooms=classrooms.map((classroom)=>{
+        return classroom.classroomId;
+    })
+    let [staffs] = await pool.query(`SELECT staffId FROM eventdetails WHERE eventId=?;`,[eventId]);
+    staffs=staffs.map((staff)=>{
+        return staff.staffId;
+    })
+    const [eventdetail]= await pool.query(`select * from eventdetails as e
+    join staffs as s on e.staffId = s.staffId where eventId=?;`,[eventId]);
+
+    
+    res.status(200).json({"event":event,"classrooms":classrooms,"staffs":staffs,"eventdetails":eventdetail});
+
+}
+const getEventByDate = async(req,res)=>{
+    const date=req.params.date; 
+    const session=req.params.session; 
+
+    // need to be completed
+    
+    res.status(200).json({"event":""});
+
 }
 
 
@@ -27,7 +70,29 @@ const getEventById = async(req,res)=>{
 //@route PUT /events/:id
 //@access private
 const updateEventById = async(req,res)=>{
-    console.log('update by id Event');
+    const eventId=req.params.id; 
+    console.log('updating event...', eventId);
+    console.log(req.body);
+    const {name,date,session,startTime,endTime,classroomList,staffList} = req.body;
+
+    try{
+        const event=await pool.query(`UPDATE events SET name=?,date=?,session=?
+        ,startTime=?,endTime=? WHERE eventId=?`,
+        [name,date,session,startTime,endTime,eventId]);
+
+
+        for(let i=0;i<staffList.length;i++){
+            console.log(classroomList[i]);
+            await pool.query(`INSERT INTO eventDetails values(?,?,?,0)`,
+            [eventId,staffList[i],classroomList[i]])
+        }
+        
+        res.sendStatus(200);
+    }
+    catch(err){
+        console.log(err)
+        res.status(400).json({"message":err.sqlMessage});
+    }
 }
 
 
@@ -36,7 +101,13 @@ const updateEventById = async(req,res)=>{
 //@route DELETE /events/:id
 //@access private
 const deleteEventById= async(req,res)=>{
-    console.log('delete by id Event');
+    const eventId=req.params.id; 
+    await pool.query(`DELETE FROM eventdetails WHERE eventId=?`,[eventId]);
+
+    await pool.query(`DELETE FROM events WHERE eventId=?`,[eventId]);
+
+    res.sendStatus(200);
+    console.log('delete by id Event...',eventId);
 }
 
 module.exports={
@@ -44,7 +115,8 @@ module.exports={
     getAllEvent,
     getEventById,
     updateEventById,
-    deleteEventById
+    deleteEventById,
+    getEventByDate
 }
 
 

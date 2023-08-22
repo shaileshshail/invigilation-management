@@ -2,16 +2,18 @@ const express = require('express');
 const {
     createClassroom,
     getAllClassroom,
-    updateClassroomById,
+    updateClassroom,
     deleteAllClassroom,
     deleteClassroomById
 } = require('../controllers/classroomController');
 
+const validateToken = require('../middleware/validateTokenHandler')
 const router = express.Router();
+//router.use(validateToken);
 
 router.post('/',createClassroom);
 router.get('/',getAllClassroom);
-router.put('/',updateClassroomById);
+router.put('/',updateClassroom);
 router.delete('/',deleteAllClassroom);
 router.delete('/:id',deleteClassroomById);
 

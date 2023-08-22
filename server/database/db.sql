@@ -5,18 +5,18 @@ CREATE TABLE classrooms(
     PRIMARY KEY(roomId)
 );
 
-CREATE TABLE staff(
+CREATE TABLE staffs(
     staffId VARCHAR(10),
     role VARCHAR(10) NOT NULL,
     name VARCHAR(30) NOT NULL,
     email VARCHAR(50) NOT NULL,
+    password VARCHAR(200) NOT NULL,
     phone INT,
     dept VARCHAR(50),
-    dutiesCompleted INT,
     PRIMARY KEY(staffId)
 );
 
-CREATE TABLE event(
+CREATE TABLE events(
     eventId int AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
     date DATE NOT NULL,
@@ -32,7 +32,10 @@ CREATE TABLE eventDetails(
     classroomId VARCHAR(50),
     attended BOOLEAN NOT NULL DEFAULT 0,
     PRIMARY KEY(eventId,staffId,classroomId),
-    FOREIGN KEY (eventId) REFERENCES event(eventId),
-    FOREIGN KEY (staffId) REFERENCES staff(staffId),
-    FOREIGN KEY (classroomId) REFERENCES classrooms(roomId)
+    FOREIGN KEY (eventId) REFERENCES events(eventId),
+);
+
+CREATE TABLE currentUsers(
+	email VARCHAR(50),
+	refreshToken varchar(600) UNIQUE
 );
