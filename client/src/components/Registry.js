@@ -1,7 +1,12 @@
 import React from 'react'
 import { useExam } from '../context/ExamContext'
 import { useState, useEffect } from 'react';
+import { useUserAuth } from '../context/UserAuthContext';
+import { useNavigate } from 'react-router-dom'
+
 const Registry = () => {
+    const {logOut}=useUserAuth();
+    const navigate = useNavigate();
     const { registerAttendence, getByDate } = useExam();
     const eventId = 14;
     const [reload, setreload] = useState(true)
@@ -20,6 +25,10 @@ const Registry = () => {
     const onsubmit = async (e) => {
         await registerAttendence(eventId, e.target.data[0].value)
     }
+    const logout=async()=>{
+        await logOut();
+        navigate('/');
+    }
     return (
         <div>
             <h1>Need to get event based on date and session -- pending</h1>
@@ -27,6 +36,9 @@ const Registry = () => {
                 <input type='text' placeholder='Staff Id' />
                 <button type='submit'>Submit</button>
             </form>
+            <button onClick={logout}>Log OUt</button>
+
+
         </div>
     )
 }

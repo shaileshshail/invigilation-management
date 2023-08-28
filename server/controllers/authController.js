@@ -57,6 +57,14 @@ const currentUser = async (req, res) => {
 
 const logoutUser = async (req, res) => {
     console.log("logging out");
+    const cookies = req.cookies;
+    if (!cookies?.jwt) {   //No cookies or cookie doesnt have jwt
+        res.status(204);
+        return res.json({ message: "Logout successfull" });
+    }
+
+    res.clearCookie('jwt', { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 ,sameSite:"Lax"});
+    res.sendStatus(204);
 };
 
 //@desc returns new accesstoken

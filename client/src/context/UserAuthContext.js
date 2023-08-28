@@ -6,7 +6,8 @@ const userAuthContext = createContext();
 
 export const UserAuthContextProvider = ({ children }) => {
 
-    const [user, setUser] = useState(null);
+    const [auth, setAuth] = useState(null);
+    const [loading, setloading] = useState(false)
 
     const logIn = async (email, password) => {
         const LOGIN_URL = 'auth/login';
@@ -23,9 +24,9 @@ export const UserAuthContextProvider = ({ children }) => {
             //console.log("accesstoken", response.data.accessToken);
 
             //helper function
-            getCurrentUser(response?.data.accessToken);
+            await getCurrentUser(response?.data.accessToken);
 
-            return JSON.stringify(response?.data);
+            return auth;
         } catch (err) {
             if (!err?.response)
                 return "No server response";
@@ -37,6 +38,8 @@ export const UserAuthContextProvider = ({ children }) => {
 
     const logOut = async () => {
         const LOGOUT_URL = 'auth/logout';
+        localStorage.clear();
+        console.log("logging out")
         try {
             const response = await axios.get(LOGOUT_URL,
 
@@ -45,7 +48,7 @@ export const UserAuthContextProvider = ({ children }) => {
                     withCredentials: true,
                 }
             );
-            setUser(null);
+            setAuth(null);
         } catch (err) {
             if (!err?.response)
                 return "No server response";
@@ -69,7 +72,9 @@ export const UserAuthContextProvider = ({ children }) => {
                     withCredentials: true,
                 });
             //console.log("currentuser", currentUser);
-            setUser({ "user": { "email": currentUser?.data.email, "firstname": currentUser?.data.firstname, "role": currentUser?.data.role }, "accessToken": accessToken });
+            const authData={ "user": { "email": currentUser?.data.email, "firstname": currentUser?.data.firstname,}, "roles": currentUser?.data.role , "accessToken": accessToken }
+            await setAuth(authData);
+            localStorage.setItem('auth',JSON.stringify(authData));
             //console.log("sadsa")
         } catch (err) {
             //console.log(err)
@@ -82,6 +87,9 @@ export const UserAuthContextProvider = ({ children }) => {
 
     const check = async () => {
         const REFRESH_URL = 'auth/refresh';
+        if (localStorage.getItem('auth')){
+            setAuth(JSON.parse(localStorage.getItem('auth')))
+        }
         //console.log("check")
         try {
             const response = await axios.get(REFRESH_URL,
@@ -92,7 +100,7 @@ export const UserAuthContextProvider = ({ children }) => {
             //console.log("response", response.data)
 
             //helper function
-            getCurrentUser(response?.data.accessToken);
+            await getCurrentUser(response?.data.accessToken);
 
         } catch (err) {
             //console.log(err)
@@ -103,13 +111,14 @@ export const UserAuthContextProvider = ({ children }) => {
         }
     }
     useEffect(() => {
-        setUser(null);
+        setloading(true);
         check();
+        setloading(false);
     }, []);
 
     return (
         <userAuthContext.Provider value={{
-            user,logIn, logOut,
+            auth,logIn, logOut,loading
         }}>
             {children}
         </userAuthContext.Provider>

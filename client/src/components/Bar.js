@@ -2,15 +2,18 @@ import React from 'react'
 import { useUserAuth } from '../context/UserAuthContext';
 import { useNavigate } from 'react-router-dom';
 const Bar = () => {
-    const { user } = useUserAuth();
+    const { auth,logOut } = useUserAuth();
     const navigate=useNavigate();
-
+    const logout=async()=>{
+        await logOut();
+        navigate('/');
+    }
     return (
         <div>
             <nav>
                 <button onClick={() => navigate('/home')}>LOGO</button>
-                <div>{JSON.stringify(user?.user)}</div>
-                <button>Logout</button>
+                <div>{JSON.stringify(auth?.user)}</div>
+                <button onClick={logout}>Logout</button>
             </nav>
             <div className='sidebar'>
                 <ul>
