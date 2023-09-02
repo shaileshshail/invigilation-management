@@ -87,7 +87,7 @@ const handleRefreshToken = async(req,res)=>{
         if(err || foundUser[0].email !== decode.user.email){
             return res.sendStatus(401);
         }
-        console.log("decode-handle",decode);
+        //console.log("decode-handle",decode);
         const accessToken=jwt.sign({
             user: {
                 firstname:decode.user.firstname,

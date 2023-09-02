@@ -15,7 +15,7 @@ const router = express.Router();
 router.post('/',createEvent);
 router.get('/',getAllEvent);
 router.get('/:id',getEventById);
-router.get('/:date/:session',getEventByDate);
+router.get('/registry/bydate',getEventByDate);
 router.put('/:id',updateEventById);
 router.delete('/:id',deleteEventById);
 

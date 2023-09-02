@@ -1,5 +1,6 @@
 const mysql = require("mysql2");
 
+
 //https://adi22maurya.medium.com/mysql-createconnection-vs-mysql-createpool-in-node-js-42a5274626e7
 const pool = mysql.createPool({
     host:process.env.MYSQL_HOST,

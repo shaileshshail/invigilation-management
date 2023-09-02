@@ -18,11 +18,14 @@ export const Exam = () => {
 
     const onsubmit =async (e) => {
       e.preventDefault();//prevent page refresh on submit
-  
       const data = e.target;
+      console.log(data)
+      let date= new Date(data[1].value)
+      date=date.toISOString().slice(0,23)
+      //console.log(date.toISOString().slice(0,23))
       const formdata = {
         "name":data[0].value,
-        "date":data[1].value,
+        "date":date,
         "session":data[2].value,
         "startTime":data[3].value,
         "endTime":data[4].value,
@@ -53,7 +56,7 @@ export const Exam = () => {
                 return(
                   <div key={exam.eventId} onClick={()=>{navigate(`/exam/${exam.eventId}`)}}  className='box'>
                       <p>{exam.name}</p>
-                      <p>{exam.date}</p>
+                      <p>{new Date(exam.date).toLocaleDateString()}</p>
                       <p>{exam.session}</p>
                       <p>{exam.startTime}</p>
                       <p>{exam.endTime}</p>

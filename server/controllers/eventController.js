@@ -52,16 +52,26 @@ const getEventById = async(req,res)=>{
     join staffs as s on e.staffId = s.staffId where eventId=?;`,[eventId]);
 
     
-    res.status(200).json({"event":event,"classrooms":classrooms,"staffs":staffs,"eventdetails":eventdetail});
+    return res.status(200).json({"event":event,"classrooms":classrooms,"staffs":staffs,"eventdetails":eventdetail});
 
 }
 const getEventByDate = async(req,res)=>{
-    const date=req.params.date; 
-    const session=req.params.session; 
+    const date = new Date()
+    const today= `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+    const session = date.getHours() >12 ? 'AN':'FN';
 
-    // need to be completed
-    
-    res.status(200).json({"event":""});
+    console.log('Getting event by date and session for registry') 
+    console.log(today,session) 
+    try{
+        const [response] = await pool.query(`SELECT * FROM events WHERE date=? AND session=?`,[today,session]);
+        return res.status(200).json({"event":response[0],'sd':'asdad'});
+
+    }
+    catch(err){
+        console.log("get event by date - registry",err)
+    }
+
+    return res.status(400).json({"event":"dd"});
 
 }
 
@@ -80,10 +90,10 @@ const updateEventById = async(req,res)=>{
         ,startTime=?,endTime=? WHERE eventId=?`,
         [name,date,session,startTime,endTime,eventId]);
 
-
+        await pool.query(`DELETE FROM eventDetails WHERE eventId=?`,[eventId]);
         for(let i=0;i<staffList.length;i++){
             console.log(classroomList[i]);
-            await pool.query(`INSERT INTO eventDetails values(?,?,?,0)`,
+            await pool.query(`INSERT INTO eventDetails VALUES(?,?,?,0)`,
             [eventId,staffList[i],classroomList[i]])
         }
         

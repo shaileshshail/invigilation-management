@@ -21,11 +21,11 @@ const Staff = () => {
     const data = e.target;
     const formdata = {
       'staffId':data[0].value,
-      'name':data[1].value,
-      'email':data[2].value,
-      'role':data[3].value,
-      'dept':data[4].value,
-      'phone':data[5].value,
+      'role':data[1].value,
+      'name':data[2].value,
+      'dept':data[3].value,
+      'phone':data[4].value,
+      'email':data[5].value,
       'password':data[6].value
     }
     await addStaff(formdata);
@@ -43,12 +43,14 @@ const Staff = () => {
         <h1>ADD STAFF</h1>
         <div className='upper'>
           <form onSubmit={onsubmit}>
+            <div>
             <input type='text' placeholder='id'/>
-            <input type='text' placeholder='name'/>
-            <input type='text' placeholder='email'/>
             <input type='text' placeholder='role'/>
+            </div>
+            <input type='text' placeholder='name'/>
             <input type='text' placeholder='department'/>
             <input type='number' placeholder='123456789'/>
+            <input type='text' placeholder='email'/>
             <input type='text' placeholder='password'/>
             <button type='submit'>Add</button>
           </form>

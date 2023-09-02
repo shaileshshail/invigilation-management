@@ -14,10 +14,21 @@ const ExamChild = () => {
     const [exam, setexam] = useState(null)
     const [examdetails, setexamdetails] = useState([])
     const [reload, setreload] = useState(true)
-
+    function formatDate (input) {
+      var datePart = input.split('/');
+      var month = parseInt(datePart[0]) // get only two digits
+      var day = parseInt(datePart[1])
+      var year = datePart[2]
+    
+      return year+'-'+(month<10?'0'+month:month)+'-'+ (day<10?'0'+day:day);
+    }
+    
     useEffect(() => {
       const load =async()=>{
         const val=await getById(params.id);
+        let date=new Date(val.data.event[0].date).toLocaleString().split(',')[0];
+        date = formatDate(date);
+        val.data.event[0].date= date;
         setexam(val.data.event[0]);
         setroomList(val.data.classrooms);
         setstaffList(val.data.staffs);
@@ -63,11 +74,11 @@ const ExamChild = () => {
         <h1>ADD EXAM</h1>
         <div className='upper'>
           <form onSubmit={onsubmit}>
-            <input type='text' placeholder='name' value={exam?.name}/>
-            <input type='date'  value={exam?.date.split('T')[0]}/>
-            <input type='text' placeholder='FN' value={exam?.session}/>
-            <input type='time'  value={exam?.startTime}/>
-            <input type='time'  value={exam?.endTime}/>
+            <input type='text' placeholder='name' value={exam?.name} onChange={(e)=>setexam({'name':e.target.value})}/>
+            <input type='date'  value={exam?.date} onChange={(e)=>setexam({'date':e.target.value})}/>
+            <input type='text' placeholder='FN' value={exam?.session} onChange={(e)=>setexam({'session':e.target.value})}/>
+            <input type='time'  value={exam?.startTime} onChange={(e)=>setexam({'startTime':e.target.value})}/>
+            <input type='time'  value={exam?.endTime} onChange={(e)=>setexam({'endTime':e.target.value})}/>
             <textarea value={roomList} placeholder='Classrooms' onChange={(e)=>SETroom(e)}/>
             <textarea value={staffList} placeholder='Staffs' onChange={(e)=>SETstaff(e)}/>
             <button type='submit'>Add</button>
@@ -89,7 +100,7 @@ const ExamChild = () => {
             <tbody>
             {examdetails?.map((row)=>{
               return(
-                <tr key={row.classroomId + row.staffId}>
+                <tr style={{backgroundColor:row.attended===1?'green':'white'}} key={row.classroomId + row.staffId}>
                   <td>{row.attended}</td>
                   <td>{row.classroomId}</td>
                   <td>{row.staffId}</td>

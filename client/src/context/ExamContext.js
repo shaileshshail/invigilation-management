@@ -110,14 +110,14 @@ export const ExamContextProvider = ({ children }) => {
                     },
                     withCredentials: true,
                 });
-
-            console.log("Exam update response",response)
+            console.log("Exam update response",response.data)
+            return response.data;
         } catch (err) {
             console.log(err)
         }
     }
-    const getByDate =async(date,session)=>{
-        const GETBYDATE_URl = `/events/${date}/${session}`;
+    const getByDate =async()=>{
+        const GETBYDATE_URl = `/events/registry/bydate`;
         try {
             const response = await axios.get(GETBYDATE_URl,
                 {
@@ -128,7 +128,7 @@ export const ExamContextProvider = ({ children }) => {
                     withCredentials: true,
                 });
 
-            console.log("Exam by id response",response)
+            console.log("Exam by date response-for registry",response)
             return response
         } catch (err) {
             console.log(err)
