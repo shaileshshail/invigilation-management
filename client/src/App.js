@@ -1,7 +1,6 @@
 import './App.css';
 import { Route, Routes } from 'react-router-dom'
 import Login from './components/Login';
-import { Home } from './components/Home';
 import { ProtectedRoute } from './ProtectedRoute';
 import { Exam } from './components/Exam';
 import Staff from './components/Staff';
@@ -32,7 +31,6 @@ function App() {
                 <Route path="/unauthorized" element={<Unauthorized />} />
 
                 <Route element={<ProtectedRoute  allowedRoles={[ROLES.Admin]} />}>
-                  <Route path='/home' element={<Home />} />
                   <Route path='/staff' element={<Staff />} />
                   <Route path='/classroom' element={<Classroom />} />
                   <Route path='/exam' element={<Exam />} />

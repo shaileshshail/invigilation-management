@@ -8,10 +8,18 @@ export const Exam = () => {
     const {getAll,deleteExam,addExam} = useExam();
     const [exams, setexams] = useState([])
     const [reload, setreload] = useState(true)
+    let date =new Date();
+    let today =new Date();
+
+    const offset = date.getTimezoneOffset()
+    today = new Date(today.getTime() - (offset*60*1000))
+    today = today.toISOString().split('T')[0]
+    console.log(today)
+
     useEffect(() => {
       const load =async()=>{
         const val=await getAll();
-        setexams(val.data.events)
+        setexams(val?.data?.events)
       }
        load();
     }, [reload]);
@@ -40,26 +48,31 @@ export const Exam = () => {
         <>
       <Bar />
       <div className='container exam'>
-        <h1>ADD EXAM</h1>
-        <div className='upper'>
-          <form onSubmit={onsubmit}>
-            <input type='text' placeholder='name'/>
-            <input type='date' placeholder='2023-10-28'/>
-            <input type='text' placeholder='FN'/>
-            <input type='time' defaultValue='09:30:00'/>
-            <input type='time' defaultValue='12:30:00'/>
-            <button type='submit'>Add</button>
+        <h1 className='exam_title'>CREATE EXAM SCHEDULE</h1>
+          <form className='exam__upper' onSubmit={onsubmit}>
+            <div className='exam__group'>
+            <input className='input exam__name' type='text' placeholder='Enter examination name'/>
+            <input className='input exam__date' type='date' min={today} placeholder='2023-10-28'/>
+            <select className='input exam__session' type='text' placeholder='FN'>
+              <option value={'FN'}>FN</option>
+              <option value={'AN'}>AN</option>
+            </select>
+            </div>
+
+            <input className='input exam__time' type='time' defaultValue='09:30:00'/>
+            <input className='input exam__time' type='time' defaultValue='12:30:00'/>
+            <button className='input exam__submit btn' type='submit'>Add</button>
           </form>
-        </div>
-        <div className='lower'>
-          {exams.map((exam)=>{
+        <div className='exam__lower'>
+          {exams?.map((exam)=>{
                 return(
-                  <div key={exam.eventId} onClick={()=>{navigate(`/exam/${exam.eventId}`)}}  className='box'>
+                  <div className='box' key={exam.eventId} onClick={()=>{navigate(`/exam/${exam.eventId}`)}}>
                       <p>{exam.name}</p>
                       <p>{new Date(exam.date).toLocaleDateString()}</p>
                       <p>{exam.session}</p>
                       <p>{exam.startTime}</p>
                       <p>{exam.endTime}</p>
+                      {date.toLocaleDateString()===new Date(exam.date).toLocaleDateString()?'Today':''}
                   </div>
                 )
               })}         

@@ -1,6 +1,9 @@
 import React from 'react'
 import { useUserAuth } from '../context/UserAuthContext';
 import { useNavigate } from 'react-router-dom';
+
+import {BsBook,BsPeopleFill,BsDoorOpenFill} from 'react-icons/bs';
+
 const Bar = () => {
     const { auth,logOut } = useUserAuth();
     const navigate=useNavigate();
@@ -9,24 +12,25 @@ const Bar = () => {
         navigate('/');
     }
     return (
-        <div>
-            <nav>
-                <button onClick={() => navigate('/home')}>LOGO</button>
-                <div>{JSON.stringify(auth?.user)}</div>
-                <button onClick={logout}>Logout</button>
+        <div className='bar'>
+            <nav className='navbar'>
+                <button className='navbar__logo' onClick={() => navigate('/exam')}>LOGO</button>
+                <div className='navbar__userid'>User ID : {auth?.user.email}    ||   Role : {auth?.roles}</div>
+                <button onClick={logout} className='navbar__logout'>Logout</button>
             </nav>
             <div className='sidebar'>
+                <p className='sidebar__title'>Exam Invigilation Portal</p>
                 <ul>
                     <li key={"0"} onClick={() => navigate('/exam')} className='sidebar-row'>
-                        <div className='icon'>a</div>
+                        <div className='icon'><BsBook /></div>
                         <label >Manage Exam</label>
                     </li>
                     <li key={"1"} onClick={() => navigate('/staff')} className='sidebar-row'>
-                        <div className='icon'>b</div>
+                        <div className='icon'><BsPeopleFill /></div>
                         <label >Add Staff</label>
                     </li>
                     <li key={"2"} onClick={() => navigate('/classroom')} className='sidebar-row'>
-                        <div className='icon'>c</div>
+                        <div className='icon'><BsDoorOpenFill /></div>
                         <label >Add Classroom</label>
                     </li>
                 </ul>

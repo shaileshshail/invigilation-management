@@ -40,19 +40,22 @@ const getEventById = async(req,res)=>{
     console.log('get Event by id...',eventId);
 
     const [event]= await pool.query(`SELECT * FROM events WHERE eventId=?;`,[eventId]);
-    let [classrooms] = await pool.query(`SELECT classroomId FROM eventdetails WHERE eventId=?;`,[eventId]);
+    let [classrooms] = await pool.query(`SELECT * FROM eventdetails WHERE eventId=? order by classroomId;`,[eventId]);
+    console.log("CLAssrooms .......",classrooms)
     classrooms=classrooms.map((classroom)=>{
-        return classroom.classroomId;
+        return {roomId:classroom.classroomId};
     })
+
     let [staffs] = await pool.query(`SELECT staffId FROM eventdetails WHERE eventId=?;`,[eventId]);
     staffs=staffs.map((staff)=>{
-        return staff.staffId;
+        return {staffId:staff.staffId};
     })
     const [eventdetail]= await pool.query(`select * from eventdetails as e
-    join staffs as s on e.staffId = s.staffId where eventId=?;`,[eventId]);
+    join staffs as s on e.staffId = s.staffId where eventId=? order by classroomId;`,[eventId]);
 
     
-    return res.status(200).json({"event":event,"classrooms":classrooms,"staffs":staffs,"eventdetails":eventdetail});
+    return res.status(200).json({"event":event,"classrooms":classrooms,
+    "staffs":staffs,"eventdetails":eventdetail});
 
 }
 const getEventByDate = async(req,res)=>{
@@ -83,12 +86,26 @@ const updateEventById = async(req,res)=>{
     const eventId=req.params.id; 
     console.log('updating event...', eventId);
     console.log(req.body);
-    const {name,date,session,startTime,endTime,classroomList,staffList} = req.body;
+    var {name,date,session,startTime,endTime,classroomList,staffList} = req.body;
+
+    const shuffleArray=(array)=>{
+        for (var i = array.length - 1; i > 0; i--) { 
+            var j = Math.floor(Math.random() * (i + 1));// Generate random number 
+            var temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }
+        return array;
+    }
+    console.log("before shuffle",staffList)
+    staffList=shuffleArray(staffList);
+    console.log("after shuffle",staffList)
 
     try{
         const event=await pool.query(`UPDATE events SET name=?,date=?,session=?
         ,startTime=?,endTime=? WHERE eventId=?`,
         [name,date,session,startTime,endTime,eventId]);
+
 
         await pool.query(`DELETE FROM eventDetails WHERE eventId=?`,[eventId]);
         for(let i=0;i<staffList.length;i++){

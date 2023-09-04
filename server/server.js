@@ -5,7 +5,11 @@ const cookieParser = require("cookie-parser");
 const credentials = require("./middleware/credentials");
 
 require("dotenv").config();
-require("./database/database");
+try{
+    require("./database/database");
+}catch(err){
+    console.log('Error in connecting to database');
+}
 
 
 

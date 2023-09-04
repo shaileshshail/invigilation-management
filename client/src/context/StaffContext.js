@@ -8,7 +8,7 @@ const staffContext = createContext();
 export const StaffContextProvider = ({ children }) => {
     const {user} = useUserAuth();
 
-    const getAll =async()=>{
+    const getAllStaff =async()=>{
         const GETSTAFF_URL = '/staffs';
         try {
             const response = await axios.get(GETSTAFF_URL,
@@ -64,7 +64,7 @@ export const StaffContextProvider = ({ children }) => {
 
     return (
         <staffContext.Provider value={{
-            addStaff,deleteStaff,getAll
+            addStaff,deleteStaff,getAllStaff
         }}>
             {children}
         </staffContext.Provider>
