@@ -1,10 +1,14 @@
 sudo: required
+language: generic
 
 services:
   - docker
 
 before_install:
   - docker build -t shaileshshail/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true shaileshshail/react-test npm run test
 
 after_success:
   - docker build -t shaileshshail/invigilation-client ./client
