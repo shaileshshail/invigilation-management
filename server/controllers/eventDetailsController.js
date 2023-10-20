@@ -14,13 +14,13 @@ const getEventDetailsById = async(req,res)=>{
 //@route PUT /eventdetails/:id
 //@access private
 const updateEventDetailsById= async(req,res)=>{
-    console.log('registering attendence for staff',req.params.staffId)
-    const r =await pool.query(`UPDATE eventdetails SET attended=1 WHERE eventId=? AND staffId=?;`,
-    [req.params.eventId,req.params.staffId]);
+    console.log('registering attendence for staff',req.params.staffId,req.params.eventId);
+    const r =await pool.query(`UPDATE eventdetails SET attended=1 WHERE eventId=? AND staffId=?;`,[req.params.eventId,req.params.staffId]);
+
     const [classroom] =await pool.query(`SELECT classroomId from eventdetails WHERE eventId=? AND staffId=?;`,
     [req.params.eventId,req.params.staffId]);
     
-    console.log(r[0].affectedRows);
+    console.log(r[0]);
     if(r[0].affectedRows){
         return res.status(200).json({'classroomId':classroom[0].classroomId,'affectedRows':r[0].affectedRows});
     }

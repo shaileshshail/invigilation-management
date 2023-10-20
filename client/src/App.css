@@ -468,3 +468,46 @@
 }
 .classroom__lower table{
 }
+
+
+.registry{
+    background-color: var(--HEADER-BG);
+    height: 100vh;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.registry__navbar{
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--BG-COLOR);
+    width: 100vw;
+}
+
+.registry__event{
+    background-color: var(--BG-COLOR);
+    min-width: 80vw;
+    height: 25vh;
+    padding: 1rem;
+    text-align: center;
+}
+
+.registry p{
+    font-size: larger;
+    font-weight: 700;
+}
+
+.registry input{
+    width: 15vw;
+    height: 2vw;
+    font-size: larger;
+    padding: 0.5em;
+    display: block;
+}
+.registry form button{
+    margin: 1rem;
+    width: 8vw;
+    height: 4vh;
+}

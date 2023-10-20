@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import { useState } from 'react';
 import { useUserAuth } from '../context/UserAuthContext';
@@ -10,10 +10,10 @@ const Login = () => {
   const [password, setpassword] = useState()
   const [message, setmessage] = useState(null)
   const { logIn, auth } = useUserAuth();
-  if (auth?.roles == 'admin') {
+  if (auth?.roles === 'admin') {
     navigate('/exam');
   }
-  else if (auth?.roles == 'registry') {
+  else if (auth?.roles === 'registry') {
     navigate('/registry');
   }
   const onSubmit = async (e) => {
@@ -32,7 +32,7 @@ const Login = () => {
   return (
     <div className='login'>
       <form onSubmit={onSubmit} className='login__form'>
-        <h1>Adminasdsd Login</h1>
+        <h1>Admin Login</h1>
         <input type='text' placeholder='Enter Username' onChange={(e) => setemail(e.target.value)} />
         <input type='password' placeholder='Enter Password' onChange={(e) => setpassword(e.target.value)} />
         <button type='submit'>Submit</button>

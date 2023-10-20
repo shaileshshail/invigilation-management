@@ -60,14 +60,14 @@ const getEventById = async(req,res)=>{
 }
 const getEventByDate = async(req,res)=>{
     const date = new Date()
-    const today= `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+    const today= `${date.getFullYear()}-${date.getMonth()>9?date.getMonth()+1:'0'+(date.getMonth()+1)}-${date.getDate()>9?date.getDate():'0'+date.getDate()}`;
     const session = date.getHours() >12 ? 'AN':'FN';
 
     console.log('Getting event by date and session for registry') 
     console.log(today,session) 
     try{
         const [response] = await pool.query(`SELECT * FROM events WHERE date=? AND session=?`,[today,session]);
-        return res.status(200).json({"event":response[0],'sd':'asdad'});
+        return res.status(200).json({"event":response,'sd':'asdad'});
 
     }
     catch(err){

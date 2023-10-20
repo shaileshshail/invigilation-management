@@ -1,6 +1,7 @@
 const pool = require("../database/database");
 const jwt = require("jsonwebtoken");
 
+
 //@desc login user
 //@route POST /auth/login
 //@access public

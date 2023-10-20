@@ -5,50 +5,59 @@ import { useUserAuth } from '../context/UserAuthContext';
 import { useNavigate } from 'react-router-dom'
 
 const Registry = () => {
-    const {logOut}=useUserAuth();
+    const { logOut, auth } = useUserAuth();
     const navigate = useNavigate();
     const { registerAttendence, getByDate } = useExam();
     const [event, setevent] = useState(null)
     const [reload, setreload] = useState(true)
     const [message, setmessage] = useState(null)
-    const date= new Date();
+
+    const date = new Date();
 
     useEffect(() => {
         const load = async () => {
             const val = await getByDate();
-            setevent(val.data.event);
-            console.log(val);        
-            console.log(parseInt(event?.startTime?.split(':')[0]-date.getHours()))    
+            setevent(val.data?.event[0]);
+            console.log(val);
         }
         load();
     }, [reload]);
 
     const onsubmit = async (e) => {
         e.preventDefault();
+        console.log(event?.eventId, e.target[0].value)
         const response = await registerAttendence(event?.eventId, e.target[0].value)
         setmessage(response);
-        
+
     }
-    const logout=async()=>{
+    const logout = async () => {
         await logOut();
         navigate('/');
     }
     return (
-        <div>
-            <div>
-                {JSON.stringify(event)}
+        <div className='registry'>
+            <nav className='registry__navbar'>
+                <button className='navbar__logo' onClick={() => navigate('/exam')}>LOGO</button>
+                <div className='navbar__userid'>User ID : {auth?.user.email}    ||   Role : {auth?.roles}</div>
+                <button onClick={logout} className='navbar__logout'>Logout</button>
+            </nav>
+            <div className='registry__event'>
+                <h1>Active Examinations :</h1>
+                <p>{event?.name}</p>
+                <p>{event?.date}</p>
+                <p>{event?.session}</p>
+                <p>{event?.startTime}</p>
+                <p>{event?.endTime}</p>
             </div>
-            <form onSubmit={onsubmit}>
-                <input type='text' placeholder='Staff Id' />
-                <button type='submit'>Submit</button>
-            </form>
-            <div hidden={message==null}>attendence registered successfully</div>
-            <br></br>
-            <br></br>
-            <br></br>
-            <h2>{message?.classroomId}</h2>
-            <button onClick={logout}>Log OUt</button>
+            <div>
+                <form onSubmit={onsubmit}>
+                    <input type='text' placeholder='Staff Id' />
+                    <button type='submit'>Submit</button>
+                </form>
+                <div hidden={message == null}>attendence registered successfully</div>
 
+                <h2>{message?.classroomId}</h2>
+            </div>
 
         </div>
     )
