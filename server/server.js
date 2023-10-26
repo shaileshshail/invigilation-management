@@ -50,7 +50,7 @@ app.use('/classrooms',require('./routes/classroomRoutes'));
 app.use('/staffs',require('./routes/staffRoutes'));
 app.use('/events',require('./routes/eventRoutes'));
 app.use('/eventdetails',require('./routes/eventDetailsRoutes'));
-
+app.use('/staffhome',require('./routes/staffHomeRoutes'));
 
 app.listen(PORT,()=>{
     console.log(`Server is running on port :${PORT}`);

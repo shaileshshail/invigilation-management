@@ -46,7 +46,7 @@ export const Exam = () => {
     }
     return (
         <>
-      <Bar />
+      <Bar show={1} />
       <div className='container exam'>
         <h1 className='exam_title'>CREATE EXAM SCHEDULE</h1>
           <form className='exam__upper' onSubmit={onsubmit}>

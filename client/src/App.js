@@ -13,8 +13,10 @@ import { ClassroomContextProvider } from './context/ClassroomContext';
 import { StaffContextProvider } from './context/StaffContext';
 import { ExamContextProvider } from './context/ExamContext';
 import { UserAuthContextProvider } from './context/UserAuthContext';
+import { Staffhome } from './components/Staffhome';
+import { StaffHomeContextProvider } from './context/StaffHomeContext';
 const ROLES = {
-  'User': 'staff',
+  'Staff': 'staff',
   'Registry': 'registry',
   'Admin': 'admin'
 }
@@ -26,21 +28,26 @@ function App() {
         <ClassroomContextProvider>
           <StaffContextProvider>
             <ExamContextProvider>
+              <StaffHomeContextProvider>
               <Routes>
+
                 <Route path='/' element={<Login />} />
                 <Route path="/unauthorized" element={<Unauthorized />} />
-
                 <Route element={<ProtectedRoute  allowedRoles={[ROLES.Admin]} />}>
                   <Route path='/staff' element={<Staff />} />
                   <Route path='/classroom' element={<Classroom />} />
                   <Route path='/exam' element={<Exam />} />
                   <Route path='/exam/:id' element={<ExamChild />} />
                 </Route>
-
                 <Route element={<ProtectedRoute  allowedRoles={[ROLES.Registry]} />} >
                   <Route path='/registry' element={<Registry />} />
                 </Route>
+                <Route element={<ProtectedRoute  allowedRoles={[ROLES.Staff]} />} >
+                  <Route path='/staffhome' element={<Staffhome />} />
+                </Route>
+
               </Routes>
+              </StaffHomeContextProvider>
             </ExamContextProvider>
           </StaffContextProvider>
         </ClassroomContextProvider>

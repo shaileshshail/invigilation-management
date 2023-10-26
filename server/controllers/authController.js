@@ -24,6 +24,7 @@ const loginUser = async (req, res) => {
                 firstname:user.name,
                 email: user.email,
                 role:user.role,
+                staffid:user.staffId,
             },
         }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "30m" });
         console.log("creating refreshtoken")
@@ -32,6 +33,7 @@ const loginUser = async (req, res) => {
                 firstname:user.name,
                 email: user.email,
                 role:user.role,
+                staffid:user.staffId,
             },
         }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "1h" });
         
@@ -94,6 +96,7 @@ const handleRefreshToken = async(req,res)=>{
                 firstname:decode.user.firstname,
                 email: decode.user.email,
                 role:decode.user.role,
+                staffid:decode.user.staffid,
             },
         },process.env.ACCESS_TOKEN_SECRET,{expiresIn:'10m'})
         res.status(200).json({accessToken})

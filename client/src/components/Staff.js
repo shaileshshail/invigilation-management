@@ -41,7 +41,7 @@ const Staff = () => {
   }
   return (
     <>
-      <Bar />
+      <Bar show={1} />
       <div className='staff container'>
         <h1 className='staff__title'>ADD STAFF</h1>
         <form className='staff__upper' onSubmit={onsubmit}>

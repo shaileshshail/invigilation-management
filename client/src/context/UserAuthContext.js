@@ -20,9 +20,9 @@ export const UserAuthContextProvider = ({ children }) => {
                     withCredentials: true,
                 }
             );
-            //console.log("response data", response.data);
+            console.log("response data", response.data);
             //console.log("accesstoken", response.data.accessToken);
-
+                    
             //helper function
             await getCurrentUser(response?.data.accessToken);
 
@@ -72,7 +72,7 @@ export const UserAuthContextProvider = ({ children }) => {
                     withCredentials: true,
                 });
             //console.log("currentuser", currentUser);
-            const authData={ "user": { "email": currentUser?.data.email, "firstname": currentUser?.data.firstname,}, "roles": currentUser?.data.role , "accessToken": accessToken }
+            const authData={ "user": { "email": currentUser?.data.email, "firstname": currentUser?.data.firstname,"staffid":currentUser?.data.staffid}, "roles": currentUser?.data.role , "accessToken": accessToken }
             await setAuth(authData);
             localStorage.setItem('auth',JSON.stringify(authData));
             //console.log("sadsa")

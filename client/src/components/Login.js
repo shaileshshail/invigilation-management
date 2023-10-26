@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { useState } from 'react';
@@ -9,13 +9,19 @@ const Login = () => {
   const [email, setemail] = useState();
   const [password, setpassword] = useState()
   const [message, setmessage] = useState(null)
-  const { logIn, auth } = useUserAuth();
+  const { logIn, auth,loading } = useUserAuth();
+ 
   if (auth?.roles === 'admin') {
     navigate('/exam');
   }
   else if (auth?.roles === 'registry') {
     navigate('/registry');
   }
+  else if (auth?.roles === 'staff') {
+    navigate('/staffhome');
+  }
+
+ 
   const onSubmit = async (e) => {
     e.preventDefault();//prevent page refresh on submit
     try {
@@ -25,8 +31,16 @@ const Login = () => {
       console.log(err.message);
     }
   }
-  useState(() => {
-
+  useEffect(() => {
+    if (auth?.roles === 'admin') {
+      navigate('/exam');
+    }
+    else if (auth?.roles === 'registry') {
+      navigate('/registry');
+    }
+    else if (auth?.roles === 'staff') {
+      navigate('/staffhome');
+    }
   }, [auth]);
 
   return (

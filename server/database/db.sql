@@ -30,6 +30,8 @@ CREATE TABLE eventDetails(
     eventId INT,
     staffId VARCHAR(10),
     classroomId VARCHAR(50),
+    date DATE NOT NULL,
+    session CHAR(2) NOT NULL,
     attended BOOLEAN NOT NULL DEFAULT 0,
     PRIMARY KEY(eventId,staffId,classroomId),
     FOREIGN KEY (eventId) REFERENCES events(eventId),

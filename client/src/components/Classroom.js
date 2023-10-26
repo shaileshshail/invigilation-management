@@ -39,7 +39,7 @@ const Classroom = () => {
   }
   return (
     <>
-      <Bar />
+      <Bar show={1}/>
       <div className='classroom container'>
         <h1 className='classroom__title'>ADD CLASSROOMS</h1>
         <form className='classroom__upper' onSubmit={onsubmit}>

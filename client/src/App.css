@@ -511,3 +511,38 @@
     width: 8vw;
     height: 4vh;
 }
+
+
+/* STAFF HOME*/
+
+.staffhome{
+    background-color: #3681ba;
+    height: 100vh;
+}
+.staffhome__navbar{
+    background-color: #5b5b5b;
+    max-height: min(70px,8vh);
+    width: 100vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.staffhome__dutylist {
+    display: flex;
+    gap: 1.5rem;
+    padding: 2rem;
+}
+
+.staffhome__duty {
+    background-color: #ffa69b;
+    width: 20vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1.5rem;
+    gap: 1em;
+
+    font-size: larger;
+    border-radius: 8px;
+}

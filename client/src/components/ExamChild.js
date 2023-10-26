@@ -124,7 +124,7 @@ const ExamChild = () => {
   }
   return (
     <>
-      <Bar />
+      <Bar show={1} />
       <div className='container examchild'>
         <h1 className='examchild__title'>ADD EXAM</h1>
         <form className='examchild__upper' onSubmit={onsubmit}>

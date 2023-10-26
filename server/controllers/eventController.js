@@ -97,9 +97,7 @@ const updateEventById = async(req,res)=>{
         }
         return array;
     }
-    console.log("before shuffle",staffList)
     staffList=shuffleArray(staffList);
-    console.log("after shuffle",staffList)
 
     try{
         const event=await pool.query(`UPDATE events SET name=?,date=?,session=?
@@ -109,9 +107,9 @@ const updateEventById = async(req,res)=>{
 
         await pool.query(`DELETE FROM eventDetails WHERE eventId=?`,[eventId]);
         for(let i=0;i<staffList.length;i++){
-            console.log(classroomList[i]);
-            await pool.query(`INSERT INTO eventDetails VALUES(?,?,?,0)`,
-            [eventId,staffList[i],classroomList[i]])
+            console.log(date,session);
+            await pool.query(`INSERT INTO eventDetails VALUES(?,?,?,?,?,0)`,
+            [eventId,staffList[i],classroomList[i],date,session])
         }
         
         res.sendStatus(200);
